@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import search from "./assets/icons/search.svg";
+import BackgroundLayout from "./components/BackgroundLayout";
 
 function App() {
   const [input, setInput] = useState<string>("");
@@ -24,6 +25,8 @@ function App() {
           />
         </div>
       </nav>
+      <BackgroundLayout></BackgroundLayout>
+      <main className="w-full flex flex-wrap gap-8 py-4 px-[10%] items-center justify-center"></main>
     </div>
   );
 }

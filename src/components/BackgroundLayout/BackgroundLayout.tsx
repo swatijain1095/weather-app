@@ -33,6 +33,8 @@ const BackgroundLayout = () => {
         imageString.toLowerCase().includes("storm")
       ) {
         setImage(Stormy);
+      } else if (imageString.toLowerCase().includes("sunny")) {
+        setImage(Sunny);
       }
     }
   }, [weather]);

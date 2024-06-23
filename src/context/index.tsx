@@ -66,7 +66,7 @@ export const WeatherContextProvider = ({
   };
 
   useEffect(() => {
-    fetchWeather();
+    // fetchWeather();
   }, [place]);
 
   useEffect(() => {
