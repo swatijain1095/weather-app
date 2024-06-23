@@ -3,7 +3,8 @@ import "./App.css";
 import search from "./assets/icons/search.svg";
 
 function App() {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState<string>("");
+
   return (
     <div className="w-full h-screen text-white px-8">
       <nav className="w-full p-3 flex justify-between items-center">
