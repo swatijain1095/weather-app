@@ -1,4 +1,10 @@
-import { createContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+  ReactNode,
+  useCallback,
+} from "react";
 import axios from "axios";
 
 interface WeatherData {
@@ -16,6 +22,11 @@ interface WeatherContextType {
   values: WeatherData[];
   city: string;
   place: string;
+}
+
+interface WeatherApiResponse {
+  address: string;
+  values: WeatherData[];
 }
 
 interface WeatherContextProviderProps {
@@ -51,7 +62,7 @@ export const WeatherContextProvider = ({
   const [city, setCity] = useState<string>("");
 
   //fetch api
-  const fetchWeather = async () => {
+  const fetchWeather = useCallback(async () => {
     const options = {
       method: "GET",
       url: "https://visual-crossing-weather.p.rapidapi.com/forecast",
@@ -71,7 +82,9 @@ export const WeatherContextProvider = ({
     try {
       const response = await axios.request(options);
       console.log(response.data);
-      const thisData = (await Object.values(response.data.locations)[0]) as any;
+      const thisData = Object.values(
+        response.data.locations
+      )[0] as WeatherApiResponse;
       setCity(thisData.address);
       setValues(thisData.values);
       setWeather(thisData.values[0]);
@@ -79,11 +92,11 @@ export const WeatherContextProvider = ({
       console.log(e);
       alert("This place doesnot exist");
     }
-  };
+  }, [place]);
 
   useEffect(() => {
-    // fetchWeather();
-  }, [place]);
+    fetchWeather();
+  }, [fetchWeather]);
 
   return (
     <WeatherContext.Provider
