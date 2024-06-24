@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./App.css";
 import search from "./assets/icons/search.svg";
 import BackgroundLayout from "./components/BackgroundLayout";
 import WeatherCard from "./components/WeatherCard";
-import { useWeatherContext } from "./context";
 import MiniCard from "./components/MiniCard";
+import { WeatherContext } from "./context";
 
 function App() {
   const [input, setInput] = useState<string>("");
-  const { weather, city, values, setPlace } = useWeatherContext();
+  const { weather, city, values, setPlace } = useContext(WeatherContext);
 
   const submitCity = () => {
     setPlace(input);
@@ -35,7 +35,7 @@ function App() {
           />
         </div>
       </nav>
-      <BackgroundLayout></BackgroundLayout>
+      <BackgroundLayout conditions={weather.conditions} />
       <main className="w-full flex flex-wrap gap-8 py-4 px-[10%] items-center justify-center">
         <WeatherCard
           place={city}

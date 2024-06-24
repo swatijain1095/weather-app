@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useWeatherContext } from "../../context";
 import { WeatherImageMap } from "../../utils/constants";
 import Clear from "../../assets/images/Clear.jpg";
 
-const BackgroundLayout = () => {
-  const {
-    weather: { conditions },
-  } = useWeatherContext();
+type BackgroundLayoutProps = {
+  conditions: string;
+};
+
+const BackgroundLayout = ({ conditions }: BackgroundLayoutProps) => {
   const [image, setImage] = useState<string>(Clear);
 
   useEffect(() => {

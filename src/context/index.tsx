@@ -1,10 +1,4 @@
-import {
-  useContext,
-  createContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
+import { createContext, useEffect, useState, ReactNode } from "react";
 import axios from "axios";
 
 interface WeatherData {
@@ -28,19 +22,30 @@ interface WeatherContextProviderProps {
   children: ReactNode;
 }
 
-const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
-
-export const WeatherContextProvider = ({
-  children,
-}: WeatherContextProviderProps) => {
-  const [weather, setWeather] = useState<WeatherData>({
+const initialContextState = {
+  weather: {
     temp: 0,
     conditions: "",
     wspd: 0,
     humidity: 0,
     heatindex: 0,
     datetime: "",
-  });
+  },
+  setPlace: () => {},
+  values: [],
+  city: "",
+  place: "",
+};
+
+export const WeatherContext =
+  createContext<WeatherContextType>(initialContextState);
+
+export const WeatherContextProvider = ({
+  children,
+}: WeatherContextProviderProps) => {
+  const [weather, setWeather] = useState<WeatherData>(
+    initialContextState.weather
+  );
   const [values, setValues] = useState<WeatherData[]>([]);
   const [place, setPlace] = useState<string>("Indore");
   const [city, setCity] = useState<string>("");
@@ -94,14 +99,3 @@ export const WeatherContextProvider = ({
     </WeatherContext.Provider>
   );
 };
-
-export const useWeatherContext = (): WeatherContextType => {
-  const context = useContext(WeatherContext);
-  if (!context) {
-    throw new Error(
-      "useWeatherContext must be used within a WeatherContextProvider"
-    );
-  }
-  return context;
-};
-// useContext(WeatherContext);
