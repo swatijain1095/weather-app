@@ -1,43 +1,26 @@
 import { useEffect, useState } from "react";
 import { useWeatherContext } from "../../context";
+import { WeatherImageMap } from "../../utils/constants";
 import Clear from "../../assets/images/Clear.jpg";
-import Fog from "../../assets/images/fog.png";
-import Cloudy from "../../assets/images/Cloudy.jpg";
-import Rainy from "../../assets/images/Rainy.jpg";
-import Snow from "../../assets/images/snow.jpg";
-import Stormy from "../../assets/images/Stormy.jpg";
-import Sunny from "../../assets/images/Sunny.jpg";
 
 const BackgroundLayout = () => {
-  const { weather } = useWeatherContext();
+  const {
+    weather: { conditions },
+  } = useWeatherContext();
   const [image, setImage] = useState<string>(Clear);
 
   useEffect(() => {
-    if (weather.conditions) {
-      const imageString = weather.conditions;
-      if (imageString.toLowerCase().includes("clear")) {
-        setImage(Clear);
-      } else if (imageString.toLowerCase().includes("cloud")) {
-        setImage(Cloudy);
-      } else if (
-        imageString.toLowerCase().includes("rain") ||
-        imageString.toLowerCase().includes("shower")
-      ) {
-        setImage(Rainy);
-      } else if (imageString.toLowerCase().includes("snow")) {
-        setImage(Snow);
-      } else if (imageString.toLowerCase().includes("fog")) {
-        setImage(Fog);
-      } else if (
-        imageString.toLowerCase().includes("thunder") ||
-        imageString.toLowerCase().includes("storm")
-      ) {
-        setImage(Stormy);
-      } else if (imageString.toLowerCase().includes("sunny")) {
-        setImage(Sunny);
+    if (conditions) {
+      const matchedImage = Object.keys(WeatherImageMap).find((key) =>
+        conditions.toLowerCase().includes(key)
+      ) as keyof typeof WeatherImageMap;
+      if (matchedImage) {
+        setImage(WeatherImageMap[matchedImage]);
+      } else {
+        setImage(Clear); // Default image if no match is found
       }
     }
-  }, [weather]);
+  }, [conditions]);
 
   return (
     <img

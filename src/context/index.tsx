@@ -55,7 +55,7 @@ export const WeatherContextProvider = ({
         unitGroup: "metric",
         aggregateHours: "24",
         location: place,
-        shortColumnNames: "0",
+        shortColumnNames: false,
       },
       headers: {
         "x-rapidapi-key": import.meta.env.VITE_API_KEY,
@@ -77,7 +77,7 @@ export const WeatherContextProvider = ({
   };
 
   useEffect(() => {
-    fetchWeather();
+    // fetchWeather();
   }, [place]);
 
   return (

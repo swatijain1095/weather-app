@@ -43,7 +43,6 @@ function App() {
           humidity={weather.humidity}
           temperature={weather.temp}
           heatIndex={weather.heatindex}
-          iconString={weather.conditions}
           conditions={weather.conditions}
         />
 
@@ -54,7 +53,7 @@ function App() {
                 key={curr.datetime}
                 time={curr.datetime}
                 temp={curr.temp}
-                iconString={curr.conditions}
+                conditions={curr.conditions}
               />
             );
           })}

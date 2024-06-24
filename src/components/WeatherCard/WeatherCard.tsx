@@ -2,12 +2,7 @@ import { useState, useEffect } from "react";
 import { useDate } from "../../hooks/useDate";
 import "../../index.css";
 import sun from "../../assets/icons/sun.png";
-import cloud from "../../assets/icons/cloud.png";
-import fog from "../../assets/icons/fog.png";
-import rain from "../../assets/icons/rain.png";
-import snow from "../../assets/icons/snow.png";
-import storm from "../../assets/icons/storm.png";
-import wind from "../../assets/icons/windy.png";
+import { WeatherIconMap } from "../../utils/constants";
 
 interface WeatherCardProps {
   temperature: number;
@@ -15,7 +10,6 @@ interface WeatherCardProps {
   humidity: number;
   place: string;
   heatIndex: number;
-  iconString: string;
   conditions: string;
 }
 
@@ -25,31 +19,23 @@ const WeatherCard = ({
   humidity,
   place,
   heatIndex,
-  iconString,
   conditions,
 }: WeatherCardProps) => {
   const [icon, setIcon] = useState(sun);
   const { time } = useDate();
 
   useEffect(() => {
-    if (iconString) {
-      if (iconString.toLowerCase().includes("cloud")) {
-        setIcon(cloud);
-      } else if (iconString.toLowerCase().includes("rain")) {
-        setIcon(rain);
-      } else if (iconString.toLowerCase().includes("clear")) {
+    if (conditions) {
+      const matchedIcon = Object.keys(WeatherIconMap).find((key) =>
+        conditions.toLowerCase().includes(key)
+      ) as keyof typeof WeatherIconMap;
+      if (matchedIcon) {
+        setIcon(WeatherIconMap[matchedIcon]);
+      } else {
         setIcon(sun);
-      } else if (iconString.toLowerCase().includes("thunder")) {
-        setIcon(storm);
-      } else if (iconString.toLowerCase().includes("fog")) {
-        setIcon(fog);
-      } else if (iconString.toLowerCase().includes("snow")) {
-        setIcon(snow);
-      } else if (iconString.toLowerCase().includes("wind")) {
-        setIcon(wind);
       }
     }
-  }, [iconString]);
+  }, [conditions]);
 
   return (
     <div className="w-[22rem] min-w-[22rem] h-[30rem] glassCard p-4">
