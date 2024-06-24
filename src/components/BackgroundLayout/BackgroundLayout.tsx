@@ -14,7 +14,7 @@ const BackgroundLayout = () => {
 
   useEffect(() => {
     if (weather.conditions) {
-      let imageString = weather.conditions;
+      const imageString = weather.conditions;
       if (imageString.toLowerCase().includes("clear")) {
         setImage(Clear);
       } else if (imageString.toLowerCase().includes("cloud")) {

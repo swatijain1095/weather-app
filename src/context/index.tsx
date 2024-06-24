@@ -8,15 +8,19 @@ import {
 import axios from "axios";
 
 interface WeatherData {
-  temp?: number;
-  conditions?: string;
+  temp: number;
+  conditions: string;
+  wspd: number;
+  humidity: number;
+  heatindex: number;
+  datetime: string;
 }
 
 interface WeatherContextType {
-  weather: WeatherData | object;
+  weather: WeatherData;
   setPlace: React.Dispatch<React.SetStateAction<string>>;
-  values: any[];
-  thisLocation: string;
+  values: WeatherData[];
+  city: string;
   place: string;
 }
 
@@ -29,10 +33,17 @@ const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 export const WeatherContextProvider = ({
   children,
 }: WeatherContextProviderProps) => {
-  const [weather, setWeather] = useState<WeatherData | object>(Object);
-  const [values, setValues] = useState<any[]>([]);
-  const [place, setPlace] = useState<string>("Jaipur");
-  const [thisLocation, setThisLocation] = useState<string>("");
+  const [weather, setWeather] = useState<WeatherData>({
+    temp: 0,
+    conditions: "",
+    wspd: 0,
+    humidity: 0,
+    heatindex: 0,
+    datetime: "",
+  });
+  const [values, setValues] = useState<WeatherData[]>([]);
+  const [place, setPlace] = useState<string>("Indore");
+  const [city, setCity] = useState<string>("");
 
   //fetch api
   const fetchWeather = async () => {
@@ -55,8 +66,8 @@ export const WeatherContextProvider = ({
     try {
       const response = await axios.request(options);
       console.log(response.data);
-      const thisData = Object.values(response.data.locations)[0] as any;
-      setThisLocation(thisData.address);
+      const thisData = (await Object.values(response.data.locations)[0]) as any;
+      setCity(thisData.address);
       setValues(thisData.values);
       setWeather(thisData.values[0]);
     } catch (e) {
@@ -66,12 +77,8 @@ export const WeatherContextProvider = ({
   };
 
   useEffect(() => {
-    // fetchWeather();
+    fetchWeather();
   }, [place]);
-
-  useEffect(() => {
-    console.log({ values });
-  }, [values]);
 
   return (
     <WeatherContext.Provider
@@ -79,7 +86,7 @@ export const WeatherContextProvider = ({
         weather,
         setPlace,
         values,
-        thisLocation,
+        city,
         place,
       }}
     >
@@ -88,5 +95,13 @@ export const WeatherContextProvider = ({
   );
 };
 
-export const useWeatherContext = (): WeatherContextType =>
-  useContext(WeatherContext);
+export const useWeatherContext = (): WeatherContextType => {
+  const context = useContext(WeatherContext);
+  if (!context) {
+    throw new Error(
+      "useWeatherContext must be used within a WeatherContextProvider"
+    );
+  }
+  return context;
+};
+// useContext(WeatherContext);
